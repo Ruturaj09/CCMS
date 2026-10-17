@@ -1,0 +1,46 @@
+<div class="page-header">
+  <div>
+    <h1>Worker Verification</h1>
+    <p class="muted">Review and verify party workers &amp; Sarpanchs registered across Akole Taluka.</p>
+  </div>
+  <a href="/admin/dashboard" class="btn btn-ghost">&larr; Back to Dashboard</a>
+</div>
+
+<div class="table-wrap">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Role</th>
+        <th>Village</th>
+        <th>Designation</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% workers.forEach(function(w) { %>
+        <tr id="row-<%= w._id %>">
+          <td><%= w.fullName %></td>
+          <td><%= w.mobileNumber %></td>
+          <td><span class="pill pill-role"><%= w.role %></span></td>
+          <td><%= w.village ? w.village.villageName : '—' %></td>
+          <td><%= w.designation || '—' %></td>
+          <td>
+            <span class="badge <%= w.isVerified ? 'badge-resolved' : 'badge-submitted' %>">
+              <%= w.isVerified ? 'Verified' : 'Pending' %>
+            </span>
+          </td>
+          <td>
+            <% if (!w.isVerified) { %>
+              <button class="btn btn-secondary btn-sm verify-btn" data-id="<%= w._id %>">Verify</button>
+            <% } %>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+
+<script src="/js/admin-workers.js"></script>

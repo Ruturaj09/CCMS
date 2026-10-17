@@ -1,0 +1,71 @@
+<div class="page-header">
+  <div>
+    <h1><%= complaint.ticketNumber %></h1>
+    <p class="muted"><%= complaint.village.villageName %> &middot; <%= complaint.category %></p>
+  </div>
+  <a href="<%= isAdminView ? '/admin/dashboard' : '/dashboard' %>" class="btn btn-ghost">&larr; Back</a>
+</div>
+
+<div class="detail-grid">
+  <div class="detail-main">
+    <div class="detail-card">
+      <div class="detail-card-top">
+        <span class="badge badge-<%= complaint.status.replace(/\s+/g,'-').toLowerCase() %>"><%= complaint.status %></span>
+        <span class="urgency urgency-<%= complaint.urgency.toLowerCase() %>"><%= complaint.urgency %> urgency</span>
+      </div>
+      <h2><%= complaint.title %></h2>
+      <p><%= complaint.description %></p>
+
+      <% if (complaint.photos && complaint.photos.length) { %>
+        <div class="photo-gallery">
+          <% complaint.photos.forEach(function(p) { %>
+            <a href="<%= p %>" target="_blank"><img src="<%= p %>" alt="Complaint photo"></a>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <% if (complaint.voiceNoteUrl) { %>
+        <div class="voice-block">
+          <label>Voice Note</label>
+          <audio controls src="<%= complaint.voiceNoteUrl %>"></audio>
+        </div>
+      <% } %>
+
+      <% if (complaint.latitude && complaint.longitude) { %>
+        <p class="muted small">📍 Location: <%= complaint.latitude.toFixed(5) %>, <%= complaint.longitude.toFixed(5) %>
+          <% if (complaint.landmark) { %> &middot; Landmark: <%= complaint.landmark %><% } %>
+        </p>
+      <% } %>
+
+      <% if (complaint.adminPublicRemark) { %>
+        <div class="remark-box">
+          <strong>Remark from MLA Office:</strong>
+          <p><%= complaint.adminPublicRemark %></p>
+        </div>
+      <% } %>
+
+      <% if (complaint.officialLetterRef) { %>
+        <p class="muted small">Official Letter Ref: <strong><%= complaint.officialLetterRef %></strong>
+          <% if (complaint.letterPdfUrl) { %> &middot; <a href="<%= complaint.letterPdfUrl %>" target="_blank">View Letter</a><% } %>
+        </p>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="detail-side">
+    <div class="detail-card">
+      <h3>Timeline</h3>
+      <ul class="timeline">
+        <% complaint.timeline.slice().reverse().forEach(function(t) { %>
+          <li>
+            <span class="timeline-dot"></span>
+            <div>
+              <p><%= t.action %></p>
+              <small class="muted"><%= new Date(t.at).toLocaleString('en-IN') %></small>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+</div>

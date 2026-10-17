@@ -1,0 +1,51 @@
+<div class="page-header">
+  <div>
+    <h1>My Dashboard</h1>
+    <p class="muted">Welcome, <%= user.fullName %> &middot; <%= user.village ? user.village.villageName : '' %></p>
+  </div>
+  <a href="/complaints/new" class="btn btn-primary">+ Raise New Complaint</a>
+</div>
+
+<% if (!user.isVerified) { %>
+  <div class="alert alert-warning">
+    Your account is pending admin verification. You can still submit complaints while verification is in progress.
+  </div>
+<% } %>
+
+<div class="stat-row">
+  <% const statMap = {}; stats.forEach(function(s){ statMap[s._id] = s.count; }); %>
+  <div class="stat-box"><span class="stat-num"><%= statMap['Submitted'] || 0 %></span><span class="stat-label">Submitted</span></div>
+  <div class="stat-box"><span class="stat-num"><%= statMap['Under Review'] || 0 %></span><span class="stat-label">Under Review</span></div>
+  <div class="stat-box"><span class="stat-num"><%= statMap['Letter Issued'] || 0 %></span><span class="stat-label">Letter Issued</span></div>
+  <div class="stat-box"><span class="stat-num"><%= statMap['Resolved'] || 0 %></span><span class="stat-label">Resolved</span></div>
+  <div class="stat-box"><span class="stat-num"><%= statMap['Rejected'] || 0 %></span><span class="stat-label">Rejected</span></div>
+</div>
+
+<h2 class="section-title">My Complaint History</h2>
+<p class="muted small">This list only shows complaints you personally submitted, in line with the platform's village &amp; worker data isolation policy.</p>
+
+<% if (complaints.length === 0) { %>
+  <div class="empty-state">
+    <p>You haven't raised any complaints yet.</p>
+    <a href="/complaints/new" class="btn btn-primary">Raise your first complaint</a>
+  </div>
+<% } else { %>
+  <div class="card-list">
+    <% complaints.forEach(function(c) { %>
+      <a href="/complaints/<%= c._id %>" class="complaint-card">
+        <div class="complaint-card-top">
+          <span class="ticket-id"><%= c.ticketNumber %></span>
+          <span class="badge badge-<%= c.status.replace(/\s+/g,'-').toLowerCase() %>"><%= c.status %></span>
+        </div>
+        <h3><%= c.title %></h3>
+        <div class="complaint-card-meta">
+          <span><%= c.category %></span>
+          <span class="dot">&middot;</span>
+          <span class="urgency urgency-<%= c.urgency.toLowerCase() %>"><%= c.urgency %></span>
+          <span class="dot">&middot;</span>
+          <span><%= new Date(c.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %></span>
+        </div>
+      </a>
+    <% }); %>
+  </div>
+<% } %>

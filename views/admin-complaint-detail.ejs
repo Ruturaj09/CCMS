@@ -1,0 +1,99 @@
+<div class="page-header">
+  <div>
+    <h1><%= complaint.ticketNumber %></h1>
+    <p class="muted"><%= complaint.village.villageName %> &middot; <%= complaint.category %></p>
+  </div>
+  <a href="/admin/dashboard" class="btn btn-ghost">&larr; Back to Dashboard</a>
+</div>
+
+<div class="detail-grid">
+  <div class="detail-main">
+    <div class="detail-card">
+      <div class="detail-card-top">
+        <span class="badge badge-<%= complaint.status.replace(/\s+/g,'-').toLowerCase() %>"><%= complaint.status %></span>
+        <span class="urgency urgency-<%= complaint.urgency.toLowerCase() %>"><%= complaint.urgency %> urgency</span>
+      </div>
+      <h2><%= complaint.title %></h2>
+      <p><%= complaint.description %></p>
+
+      <% if (complaint.photos && complaint.photos.length) { %>
+        <div class="photo-gallery">
+          <% complaint.photos.forEach(function(p) { %>
+            <a href="<%= p %>" target="_blank"><img src="<%= p %>" alt="Complaint photo"></a>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <% if (complaint.voiceNoteUrl) { %>
+        <div class="voice-block">
+          <label>Voice Note</label>
+          <audio controls src="<%= complaint.voiceNoteUrl %>"></audio>
+        </div>
+      <% } %>
+
+      <% if (complaint.latitude && complaint.longitude) { %>
+        <p class="muted small">📍 <%= complaint.latitude.toFixed(5) %>, <%= complaint.longitude.toFixed(5) %>
+          <% if (complaint.landmark) { %> &middot; Landmark: <%= complaint.landmark %><% } %>
+        </p>
+      <% } %>
+    </div>
+
+    <div class="detail-card">
+      <h3>Worker Details</h3>
+      <table class="kv-table">
+        <tr><td>Name</td><td><%= complaint.user.fullName %></td></tr>
+        <tr><td>Mobile</td><td><%= complaint.user.mobileNumber %></td></tr>
+        <tr><td>WhatsApp</td><td><%= complaint.user.whatsappNumber || '—' %></td></tr>
+        <tr><td>Designation</td><td><%= complaint.user.designation || '—' %></td></tr>
+        <tr><td>Verified</td><td><%= complaint.user.isVerified ? 'Yes' : 'Pending Review' %></td></tr>
+      </table>
+    </div>
+
+    <div class="detail-card">
+      <h3>Timeline</h3>
+      <ul class="timeline">
+        <% complaint.timeline.slice().reverse().forEach(function(t) { %>
+          <li>
+            <span class="timeline-dot"></span>
+            <div>
+              <p><%= t.action %><% if (t.actor) { %> <span class="muted small">— <%= t.actor.fullName %></span><% } %></p>
+              <small class="muted"><%= new Date(t.at).toLocaleString('en-IN') %></small>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="detail-side">
+    <div class="detail-card">
+      <h3>Action &amp; Letter Generator</h3>
+      <form id="action-form" data-id="<%= complaint._id %>" enctype="multipart/form-data">
+        <label for="status">Update Status</label>
+        <select id="status" name="status">
+          <% ['Submitted','Under Review','Letter Issued','Resolved','Rejected'].forEach(function(s) { %>
+            <option value="<%= s %>" <%= complaint.status === s ? 'selected' : '' %>><%= s %></option>
+          <% }); %>
+        </select>
+
+        <label for="officialLetterRef">Official Letter Reference No.</label>
+        <input type="text" id="officialLetterRef" name="officialLetterRef" value="<%= complaint.officialLetterRef || '' %>" placeholder="e.g. AKL/OUT/2026/0451">
+
+        <label for="letterPdf">Upload Scanned Letter</label>
+        <input type="file" id="letterPdf" name="letterPdf" accept="application/pdf,image/*">
+
+        <label for="adminPublicRemark">Public Remark <span class="muted small">(visible to worker)</span></label>
+        <textarea id="adminPublicRemark" name="adminPublicRemark" rows="3"><%= complaint.adminPublicRemark || '' %></textarea>
+
+        <label for="adminInternalNote">Internal Note <span class="muted small">(MLA office only)</span></label>
+        <textarea id="adminInternalNote" name="adminInternalNote" rows="3"><%= complaint.adminInternalNote || '' %></textarea>
+
+        <button type="submit" class="btn btn-primary btn-block">Save Update</button>
+        <div id="action-success" class="form-success hidden">Saved &amp; worker notified.</div>
+        <div id="action-error" class="form-error hidden"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/js/admin-action.js"></script>

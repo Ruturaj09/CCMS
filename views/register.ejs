@@ -1,0 +1,39 @@
+<div class="auth-wrap">
+  <div class="auth-card auth-card-wide">
+    <h1>Worker Profile Registration</h1>
+    <p class="auth-subtitle">Complete your profile to raise complaints for your village.</p>
+
+    <form id="register-form" class="auth-form">
+      <input type="hidden" id="mobileNumber" name="mobileNumber" value="<%= typeof mobileNumber !== 'undefined' ? mobileNumber : '' %>">
+
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" required>
+
+      <label for="role">Role</label>
+      <select id="role" name="role" required>
+        <option value="worker">Party Worker</option>
+        <option value="sarpanch">Sarpanch / Gram Leader</option>
+      </select>
+
+      <label for="designation">Designation</label>
+      <input type="text" id="designation" name="designation" placeholder="e.g. Booth President, Ward Member">
+
+      <label for="whatsappNumber">WhatsApp Number</label>
+      <input type="tel" id="whatsappNumber" name="whatsappNumber" maxlength="10" placeholder="10-digit WhatsApp number">
+
+      <label for="villageId">Gram Panchayat / Village</label>
+      <select id="villageId" name="villageId" required>
+        <option value="">Select your village</option>
+        <% villages.forEach(function(v) { %>
+          <option value="<%= v._id %>"><%= v.villageName %></option>
+        <% }); %>
+      </select>
+
+      <button type="submit" class="btn btn-primary btn-block">Complete Registration</button>
+    </form>
+
+    <div id="register-error" class="form-error hidden"></div>
+  </div>
+</div>
+
+<script src="/js/register.js"></script>

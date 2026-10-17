@@ -1,0 +1,31 @@
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="<%= currentUser ? (['admin','mla'].includes(currentUser.role) ? '/admin/dashboard' : '/dashboard') : '/login' %>" class="brand">
+      <span class="brand-mark">AKL</span>
+      <span class="brand-text">
+        <strong>Akole Taluka CCMS</strong>
+        <small>Office of MLA Dr. Kiran Lahamte</small>
+      </span>
+    </a>
+
+    <nav class="navbar-links">
+      <% if (currentUser && ['worker','sarpanch'].includes(currentUser.role)) { %>
+        <a href="/dashboard">My Dashboard</a>
+        <a href="/complaints/new" class="btn-nav-cta">+ Raise Complaint</a>
+      <% } else if (currentUser && ['admin','mla'].includes(currentUser.role)) { %>
+        <a href="/admin/dashboard">Master Dashboard</a>
+        <a href="/admin/workers">Worker Verification</a>
+      <% } %>
+
+      <% if (currentUser) { %>
+        <span class="navbar-user">
+          <span class="pill pill-role"><%= currentUser.role %></span>
+          <%= currentUser.fullName %>
+        </span>
+        <a href="/logout" class="btn-nav-logout">Logout</a>
+      <% } else { %>
+        <a href="/login">Login</a>
+      <% } %>
+    </nav>
+  </div>
+</header>

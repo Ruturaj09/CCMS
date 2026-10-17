@@ -1,0 +1,60 @@
+<div class="page-header">
+  <div>
+    <h1>Raise a Complaint</h1>
+    <p class="muted">Fill in the details below. A unique ticket number will be generated automatically.</p>
+  </div>
+  <a href="/dashboard" class="btn btn-ghost">&larr; Back to Dashboard</a>
+</div>
+
+<form id="complaint-form" class="form-card" enctype="multipart/form-data">
+  <label for="category">Category</label>
+  <select id="category" name="category" required>
+    <option value="">Select a category</option>
+    <option>Roads/Infrastructure</option>
+    <option>Water Supply</option>
+    <option>MSEB/Electricity</option>
+    <option>Health/Hospital</option>
+    <option>Agriculture/Irrigation</option>
+    <option>Revenue/Land</option>
+    <option>Personal Grievance</option>
+    <option>Education</option>
+  </select>
+
+  <label for="title">Title</label>
+  <input type="text" id="title" name="title" maxlength="200" placeholder="Short summary of the issue" required>
+
+  <label for="description">Description (Marathi / English supported)</label>
+  <textarea id="description" name="description" rows="5" placeholder="वर्णन लिहा / Describe the issue in detail"></textarea>
+
+  <label for="urgency">Urgency</label>
+  <select id="urgency" name="urgency">
+    <option value="Normal">Normal</option>
+    <option value="High">High</option>
+    <option value="Emergency">Emergency</option>
+  </select>
+
+  <label>Photos <span class="muted small">(up to 3 images, max 5MB each)</span></label>
+  <input type="file" id="photos" name="photos" accept="image/*" multiple capture="environment">
+  <div id="photo-preview" class="photo-preview"></div>
+
+  <label>Voice Note <span class="muted small">(optional, max 60 seconds)</span></label>
+  <div class="voice-recorder">
+    <button type="button" id="record-btn" class="btn btn-secondary">🎙️ Start Recording</button>
+    <span id="record-status" class="muted small"></span>
+    <audio id="voice-playback" controls class="hidden"></audio>
+  </div>
+
+  <label>Location</label>
+  <div class="location-row">
+    <button type="button" id="capture-location" class="btn btn-secondary">📍 Capture GPS Location</button>
+    <span id="location-status" class="muted small">No location captured yet.</span>
+  </div>
+  <input type="text" id="landmark" name="landmark" placeholder="Nearby landmark (optional)">
+  <input type="hidden" id="latitude" name="latitude">
+  <input type="hidden" id="longitude" name="longitude">
+
+  <button type="submit" class="btn btn-primary btn-block">Submit Complaint</button>
+  <div id="submit-error" class="form-error hidden"></div>
+</form>
+
+<script src="/js/complaint-form.js"></script>

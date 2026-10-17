@@ -1,0 +1,26 @@
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Worker &amp; Admin Login</h1>
+    <p class="auth-subtitle">Mobile OTP verification, per Akole Taluka CCMS security policy.</p>
+
+    <form id="mobile-form" class="auth-form">
+      <label for="mobileNumber">Mobile Number</label>
+      <input type="tel" id="mobileNumber" name="mobileNumber" maxlength="10" pattern="\d{10}" placeholder="10-digit mobile number" required>
+      <button type="submit" class="btn btn-primary btn-block">Send OTP</button>
+    </form>
+
+    <form id="otp-form" class="auth-form hidden">
+      <label for="code">Enter OTP</label>
+      <input type="text" id="code" name="code" maxlength="6" pattern="\d{6}" placeholder="6-digit code" required>
+      <p class="dev-hint" id="dev-hint"></p>
+      <button type="submit" class="btn btn-primary btn-block">Verify &amp; Continue</button>
+      <button type="button" id="resend-otp" class="btn btn-link">Resend OTP</button>
+    </form>
+
+    <div id="auth-error" class="form-error hidden"></div>
+
+    <p class="auth-footnote">New worker or Sarpanch? Verify your mobile above — you'll be guided to registration automatically if your number isn't on file yet.</p>
+  </div>
+</div>
+
+<script src="/js/otp.js"></script>
