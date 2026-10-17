@@ -7,7 +7,6 @@ services:
     name: akole-ccms-api
     runtime: node
     plan: free
-    rootDir: backend
     buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /api/v1/villages
